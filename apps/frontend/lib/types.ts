@@ -34,3 +34,8 @@ export interface Placement {
   campaignId: string;
   adSlotId: string;
 }
+
+export interface ApiError {
+  message: string;
+  code?: string;
+}

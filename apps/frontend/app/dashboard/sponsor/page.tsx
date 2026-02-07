@@ -1,8 +1,10 @@
+import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { getUserRole } from '@/lib/auth-helpers';
 import { CampaignList } from './components/campaign-list';
+import { CampaignLoading } from './components/campaign-loading';
 
 export default async function SponsorDashboard() {
   const session = await auth.api.getSession({
@@ -25,8 +27,10 @@ export default async function SponsorDashboard() {
         <h1 className="text-2xl font-bold">My Campaigns</h1>
         {/* TODO: Add CreateCampaignButton here */}
       </div>
-
-      <CampaignList />
+      <Suspense fallback={<CampaignLoading />}>
+        {/* User already verified as sponsor, so roleData.sponsorId must be defined */}
+        <CampaignList sponsorId={roleData.sponsorId!} />
+      </Suspense>
     </div>
   );
 }
