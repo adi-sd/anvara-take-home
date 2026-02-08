@@ -208,6 +208,11 @@ model Payment {
 // ENUMS
 // ============================================================================
 
+enum UserType {
+  SPONSOR
+  PUBLISHER
+}
+
 enum SubscriptionTier {
   FREE
   STARTER

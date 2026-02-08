@@ -1,5 +1,5 @@
 import { Router, type Request, type Response, type IRouter } from 'express';
-import { prisma } from '../db.js';
+import { prisma } from '../lib/db.js';
 
 const router: IRouter = Router();
 

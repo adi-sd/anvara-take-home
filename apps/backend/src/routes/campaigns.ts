@@ -1,8 +1,13 @@
 import { Router, type Request, type Response, type IRouter } from 'express';
-import { prisma } from '../db.js';
+import { prisma } from '../lib/db.js';
 import { getParam } from '../utils/helpers.js';
+import { authMiddleware, requireSponsor } from '../auth.js';
 
 const router: IRouter = Router();
+
+// Apply middleware to ALL campaign routes
+router.use(authMiddleware);
+router.use(requireSponsor);
 
 // GET /api/campaigns - List all campaigns
 router.get('/', async (req: Request, res: Response) => {

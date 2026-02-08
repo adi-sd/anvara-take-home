@@ -1,9 +1,9 @@
 import { Router, type Request, type Response, type IRouter } from 'express';
-import { prisma } from '../db.js';
+import { prisma } from '../lib/db.js';
 
 const router: IRouter = Router();
 
-// GET /api/health - Health check endpoint
+// GET /api/health - Health check endpoint - PUBLIC
 router.get('/', async (_req: Request, res: Response) => {
   try {
     // Check database connection

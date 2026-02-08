@@ -1,8 +1,13 @@
 import { Router, type Request, type Response, type IRouter } from 'express';
-import { prisma } from '../db.js';
+import { prisma } from '../lib/db.js';
 import { getParam } from '../utils/helpers.js';
+import { authMiddleware, requirePublisher } from '../auth.js';
 
 const router: IRouter = Router();
+
+// Apply middleware to ALL ad slot routes
+router.use(authMiddleware);
+router.use(requirePublisher);
 
 // GET /api/ad-slots - List available ad slots
 router.get('/', async (req: Request, res: Response) => {
@@ -73,7 +78,6 @@ router.post('/', async (req: Request, res: Response) => {
       return;
     }
 
-    // TODO: Add authentication middleware to verify user owns publisherId
     // TODO: Validate that basePrice is positive
     // TODO: Validate that 'type' is valid enum value
 

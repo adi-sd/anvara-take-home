@@ -15,7 +15,7 @@ import {
   PlacementStatus,
   PaymentType,
   PaymentStatus,
-} from './generated/prisma/client.js';
+} from '../generated/prisma/client.js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 // Create the PostgreSQL driver adapter for Prisma 7
