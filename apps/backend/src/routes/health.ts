@@ -1,10 +1,8 @@
-import { Router, type Request, type Response, type IRouter } from 'express';
+import { type Request, type Response } from 'express';
 import { prisma } from '../lib/db.js';
 
-const router: IRouter = Router();
-
-// GET /api/health - Health check endpoint - PUBLIC
-router.get('/', async (_req: Request, res: Response) => {
+// healthCheck- Health check endpoint - PUBLIC
+export const healthCheck = async (_req: Request, res: Response) => {
   try {
     // Check database connection
     await prisma.$queryRaw`SELECT 1`;
@@ -14,12 +12,11 @@ router.get('/', async (_req: Request, res: Response) => {
       database: 'connected',
     });
   } catch (error) {
+    console.error('Error fetching health status:', error);
     res.status(503).json({
       status: 'error',
       timestamp: new Date().toISOString(),
       database: 'disconnected',
     });
   }
-});
-
-export default router;
+};

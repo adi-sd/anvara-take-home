@@ -1,11 +1,9 @@
-import { Router, type Request, type Response, type IRouter } from 'express';
+import { type Request, type Response } from 'express';
 import { prisma } from '../lib/db.js';
 import { getParam } from '../utils/helpers.js';
 
-const router: IRouter = Router();
-
-// GET /api/publishers - List all publishers
-router.get('/', async (_req: Request, res: Response) => {
+// getPublishers - List all publishers
+export const getPublishers = async (_req: Request, res: Response) => {
   try {
     const publishers = await prisma.publisher.findMany({
       include: {
@@ -20,10 +18,10 @@ router.get('/', async (_req: Request, res: Response) => {
     console.error('Error fetching publishers:', error);
     res.status(500).json({ error: 'Failed to fetch publishers' });
   }
-});
+};
 
-// GET /api/publishers/:id - Get single publisher with ad slots
-router.get('/:id', async (req: Request, res: Response) => {
+// getPublisher - Get single publisher with ad slots
+export const getPublisher = async (req: Request, res: Response) => {
   try {
     const id = getParam(req.params.id);
     const publisher = await prisma.publisher.findUnique({
@@ -50,6 +48,43 @@ router.get('/:id', async (req: Request, res: Response) => {
     console.error('Error fetching publisher:', error);
     res.status(500).json({ error: 'Failed to fetch publisher' });
   }
-});
+};
 
-export default router;
+// createPublisher - Create new publisher
+export const createPublisher = async (req: Request, res: Response) => {
+  try {
+    const { name, email, website, monthlyViews, userId } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !userId) {
+      res.status(400).json({ error: 'Name and userId are required' });
+      return;
+    }
+
+    const newPublisher = await prisma.publisher.create({
+      data: { name, email, website, monthlyViews, userId },
+    });
+
+    res.status(201).json(newPublisher);
+  } catch (error) {
+    console.error('Error creating publisher:', error);
+    res.status(500).json({ error: 'Failed to create publisher' });
+  }
+};
+// updatePublisher - Update publisher details (only specific publisher can update their profile)
+export const updatePublisher = async (req: Request, res: Response) => {
+  try {
+    const id = getParam(req.params.id);
+    const { name, website, monthlyViews } = req.body;
+
+    const updatedPublisher = await prisma.publisher.update({
+      where: { id },
+      data: { name, website, monthlyViews },
+    });
+
+    res.json(updatedPublisher);
+  } catch (error) {
+    console.error('Error updating publisher:', error);
+    res.status(500).json({ error: 'Failed to update publisher' });
+  }
+};

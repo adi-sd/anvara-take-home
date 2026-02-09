@@ -1,10 +1,8 @@
-import { Router, type Request, type Response, type IRouter } from 'express';
+import { type Request, type Response } from 'express';
 import { prisma } from '../lib/db.js';
 
-const router: IRouter = Router();
-
-// GET /api/sponsors - List all sponsors
-router.get('/', async (_req: Request, res: Response) => {
+// getSponsors - List all sponsors
+export const getSponsors = async (_req: Request, res: Response) => {
   try {
     const sponsors = await prisma.sponsor.findMany({
       include: {
@@ -19,10 +17,10 @@ router.get('/', async (_req: Request, res: Response) => {
     console.error('Error fetching sponsors:', error);
     res.status(500).json({ error: 'Failed to fetch sponsors' });
   }
-});
+};
 
-// GET /api/sponsors/:id - Get single sponsor with campaigns
-router.get('/:id', async (req: Request, res: Response) => {
+// getSponsor - Get single sponsor with campaigns
+export const getSponsor = async (req: Request, res: Response) => {
   try {
     const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
     const sponsor = await prisma.sponsor.findUnique({
@@ -50,10 +48,10 @@ router.get('/:id', async (req: Request, res: Response) => {
     console.error('Error fetching sponsor:', error);
     res.status(500).json({ error: 'Failed to fetch sponsor' });
   }
-});
+};
 
-// POST /api/sponsors - Create new sponsor
-router.post('/', async (req: Request, res: Response) => {
+// createSponsor- Create new sponsor
+export const createSponsor = async (req: Request, res: Response) => {
   try {
     const { name, email, website, logo, description, industry } = req.body;
 
@@ -71,9 +69,22 @@ router.post('/', async (req: Request, res: Response) => {
     console.error('Error creating sponsor:', error);
     res.status(500).json({ error: 'Failed to create sponsor' });
   }
-});
+};
 
-// TODO: Add PUT /api/sponsors/:id endpoint
-// Update sponsor details
+// updateSponsor - Update sponsor details
+export const updateSponsor = async (req: Request, res: Response) => {
+  try {
+    const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
+    const { name, email, website, logo, description, industry } = req.body;
 
-export default router;
+    const sponsor = await prisma.sponsor.update({
+      where: { id },
+      data: { name, email, website, logo, description, industry },
+    });
+
+    res.json(sponsor);
+  } catch (error) {
+    console.error('Error updating sponsor:', error);
+    res.status(500).json({ error: 'Failed to update sponsor' });
+  }
+};

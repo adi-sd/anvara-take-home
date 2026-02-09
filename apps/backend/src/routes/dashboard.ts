@@ -1,10 +1,8 @@
-import { Router, type Request, type Response, type IRouter } from 'express';
+import { type Request, type Response } from 'express';
 import { prisma } from '../lib/db.js';
 
-const router: IRouter = Router();
-
-// GET /api/dashboard/stats - Get overall platform stats
-router.get('/stats', async (_req: Request, res: Response) => {
+// getDashboardStats - Get overall platform stats
+export const getDashboardStats = async (_req: Request, res: Response) => {
   try {
     const [sponsorCount, publisherCount, activeCampaigns, totalPlacements, placementMetrics] =
       await Promise.all([
@@ -42,6 +40,4 @@ router.get('/stats', async (_req: Request, res: Response) => {
     console.error('Error fetching dashboard stats:', error);
     res.status(500).json({ error: 'Failed to fetch dashboard stats' });
   }
-});
-
-export default router;
+};

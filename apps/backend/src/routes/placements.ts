@@ -1,11 +1,9 @@
-import { Router, type Request, type Response, type IRouter } from 'express';
+import { type Request, type Response } from 'express';
 import { prisma } from '../lib/db.js';
 import { getParam } from '../utils/helpers.js';
 
-const router: IRouter = Router();
-
-// GET /api/placements - List placements
-router.get('/', async (req: Request, res: Response) => {
+// getPlacements - List placements
+export const getPlacements = async (req: Request, res: Response) => {
   try {
     const { campaignId, publisherId, status } = req.query;
 
@@ -37,10 +35,10 @@ router.get('/', async (req: Request, res: Response) => {
     console.error('Error fetching placements:', error);
     res.status(500).json({ error: 'Failed to fetch placements' });
   }
-});
+};
 
-// POST /api/placements - Create new placement
-router.post('/', async (req: Request, res: Response) => {
+// createPlacement - Create new placement
+export const createPlacement = async (req: Request, res: Response) => {
   try {
     const {
       campaignId,
@@ -82,6 +80,4 @@ router.post('/', async (req: Request, res: Response) => {
     console.error('Error creating placement:', error);
     res.status(500).json({ error: 'Failed to create placement' });
   }
-});
-
-export default router;
+};

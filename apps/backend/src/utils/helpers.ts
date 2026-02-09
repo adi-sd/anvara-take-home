@@ -79,3 +79,8 @@ export function formatDate(date: any): string {
   // BUG: Doesn't handle invalid dates
   return new Date(date).toLocaleDateString();
 }
+
+// Helper to check if a value is in an enum
+export function checkValueInEnum(value: string | number, enumObj: object): boolean {
+  return Object.values(enumObj).includes(value);
+}
