@@ -4,7 +4,7 @@
 
 import { RequestInit } from 'next/dist/server/web/spec-extension/request';
 
-import { ApiError, AdSlot, Campaign, Placement } from './types';
+import { ApiError, AdSlot, Campaign, Placement, UserInfo } from './types';
 
 // TODO: Add authentication token to requests
 // Hint: Include credentials: 'include' for cookie-based auth, or
@@ -14,6 +14,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 
 export async function api<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_URL}${endpoint}`, {
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     ...options,
   });
@@ -24,11 +25,16 @@ export async function api<T>(endpoint: string, options?: RequestInit): Promise<T
   return res.json();
 }
 
+// Auth
+export async function getCurrentUserRole(userId: string): Promise<UserInfo> {
+  return api<UserInfo>(`/api/auth/role/${userId}`);
+}
+
 // Campaigns
-export const getCampaigns = (sponsorId?: string) =>
-  api<Campaign[]>(sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns', {
-    cache: 'force-cache',
-  });
+export const getCampaigns = (sponsorId?: string) => {
+  console.log('Fetching campaigns with sponsorId:', sponsorId);
+  return api<Campaign[]>(sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns');
+};
 export const getCampaign = (id: string) => api<Campaign>(`/api/campaigns/${id}`);
 export const createCampaign = (data: Campaign) =>
   api('/api/campaigns', { method: 'POST', body: JSON.stringify(data) });

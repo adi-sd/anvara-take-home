@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { getUserRole } from '@/lib/auth-helpers';
 import { AdSlotList } from './components/ad-slot-list';
+import { UserRole } from '@/lib/types';
 
 export default async function PublisherDashboard() {
   const session = await auth.api.getSession({
@@ -15,7 +16,7 @@ export default async function PublisherDashboard() {
 
   // Verify user has 'publisher' role
   const roleData = await getUserRole(session.user.id);
-  if (roleData.role !== 'publisher') {
+  if (roleData.role !== UserRole.PUBLISHER) {
     redirect('/');
   }
 

@@ -1,6 +1,17 @@
 // Core types matching the Prisma schema
 
-export type UserRole = 'sponsor' | 'publisher';
+export enum UserRole {
+  SPONSOR = "sponsor",
+  PUBLISHER = "publisher",
+}
+
+export interface UserInfo {
+  id: string;
+  email: string;
+  role: UserRole;
+  sponsorId?: string | null;
+  publisherId?: string | null;
+}
 
 export interface Campaign {
   id: string;

@@ -2,6 +2,7 @@ import { Suspense } from 'react';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
+import { UserRole } from '@/lib/types';
 import { getUserRole } from '@/lib/auth-helpers';
 import { CampaignList } from './components/campaign-list';
 import { CampaignLoading } from './components/campaign-loading';
@@ -17,7 +18,7 @@ export default async function SponsorDashboard() {
 
   // Verify user has 'sponsor' role
   const roleData = await getUserRole(session.user.id);
-  if (roleData.role !== 'sponsor') {
+  if (roleData.role !== UserRole.SPONSOR) {
     redirect('/');
   }
 

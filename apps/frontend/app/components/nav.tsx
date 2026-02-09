@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { authClient } from '@/auth-client';
+import { getCurrentUserRole } from '@/lib/api';
 
 type UserRole = 'sponsor' | 'publisher' | null;
 
@@ -15,12 +16,13 @@ export function Nav() {
   // Fetch user role from backend when user is logged in
   useEffect(() => {
     if (user?.id) {
-      fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291'}/api/auth/role/${user.id}`
-      )
-        .then((res) => res.json())
-        .then((data) => setRole(data.role))
-        .catch(() => setRole(null));
+      getCurrentUserRole(user.id)
+        .then((userInfo) => {
+          setRole(userInfo.role);
+        })
+        .catch((err) => {
+          setRole(null);
+        });
     } else {
       setRole(null);
     }
@@ -86,7 +88,7 @@ export function Nav() {
           ) : (
             <Link
               href="/login"
-              className="rounded bg-[--color-primary] px-4 py-2 text-sm text-white hover:bg-[--color-primary-hover]"
+              className="rounded bg-gray-600 px-4 py-2 text-sm text-white hover:bg-[--color-primary-hover]"
             >
               Login
             </Link>
