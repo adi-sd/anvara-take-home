@@ -93,21 +93,16 @@ router.put(
 // GET /api/ad-slots - List available ad slots with optional filters (publisherId, type, availability)
 router.get('/ad-slots', authMiddleware, requirePublisher, AdSlotsRouteHandler.getAdSlots);
 
-// GET /api/ad-slots/:id - Get single ad slot with details
-router.get('/ad-slots/:id', authMiddleware, requirePublisher, AdSlotsRouteHandler.getAdSlot);
-
 // POST /api/ad-slots - Create new ad slot (only publisher can create)
 router.post('/ad-slots', authMiddleware, requirePublisher, AdSlotsRouteHandler.createAdSlot);
 
-// POST /api/ad-slots/:id/book - Book an ad slot for a campaign (only sponsor can book)
-router.post('/ad-slots/:id/book', authMiddleware, requireSponsor, AdSlotsRouteHandler.bookAdSlot);
-
-// POST /api/ad-slots/:id/unbook - Unbook an ad slot (only sponsor can unbook)
-router.post(
-  '/ad-slots/:id/unbook',
+// GET /api/ad-slots/:id - Get single ad slot with details
+router.get(
+  '/ad-slots/:id',
   authMiddleware,
-  requireSponsor,
-  AdSlotsRouteHandler.unbookAdSlot
+  requirePublisher,
+  requireAdSlotOwner,
+  AdSlotsRouteHandler.getAdSlot
 );
 
 // PUT /api/ad-slots/:id - Update ad slot details (only publisher can update their ad slot)
@@ -128,12 +123,26 @@ router.delete(
   AdSlotsRouteHandler.deleteAdSlot
 );
 
+// POST /api/ad-slots/:id/book - Book an ad slot for a campaign (only sponsor can book)
+router.post('/ad-slots/:id/book', authMiddleware, requireSponsor, AdSlotsRouteHandler.bookAdSlot);
+
+// POST /api/ad-slots/:id/unbook - Unbook an ad slot (only sponsor can unbook)
+router.post(
+  '/ad-slots/:id/unbook',
+  authMiddleware,
+  requireSponsor,
+  AdSlotsRouteHandler.unbookAdSlot
+);
+
 // ============================================================
 // CAMPAIGN ROUTES
 // ============================================================
 
 // GET /api/campaigns - List all campaigns with optional filters (status, sponsorId)
 router.get('/campaigns', authMiddleware, requireSponsor, CampaignsRouteHandler.getCampaigns);
+
+// POST /api/campaigns - Create new campaign (only sponsor can create)
+router.post('/campaigns', authMiddleware, requireSponsor, CampaignsRouteHandler.createCampaign);
 
 // GET /api/campaigns/:id - Get single campaign with details
 router.get(
@@ -143,9 +152,6 @@ router.get(
   requireCampaignOwner,
   CampaignsRouteHandler.getCampaign
 );
-
-// POST /api/campaigns - Create new campaign (only sponsor can create)
-router.post('/campaigns', authMiddleware, requireSponsor, CampaignsRouteHandler.createCampaign);
 
 // PUT /api/campaigns/:id - Update campaign details (only sponsor can update their campaign)
 router.put(

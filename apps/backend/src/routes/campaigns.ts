@@ -28,36 +28,6 @@ export const getCampaigns = async (req: Request, res: Response) => {
   }
 };
 
-// getCampaign - Get single campaign with details
-export const getCampaign = async (req: Request, res: Response) => {
-  try {
-    const campaignId = getParam(req.params.id);
-    const campaign = await prisma.campaign.findUnique({
-      where: { id: campaignId },
-      include: {
-        sponsor: true,
-        creatives: true,
-        placements: {
-          include: {
-            adSlot: true,
-            publisher: { select: { id: true, name: true, category: true } },
-          },
-        },
-      },
-    });
-
-    if (!campaign) {
-      res.status(404).json({ error: 'Campaign not found' });
-      return;
-    }
-
-    res.status(200).json(campaign);
-  } catch (error) {
-    console.error('Error fetching campaign:', error);
-    res.status(500).json({ error: 'Failed to fetch campaign' });
-  }
-};
-
 // createCampaign - Create new campaign
 export const createCampaign = async (req: Request, res: Response) => {
   try {
@@ -103,6 +73,36 @@ export const createCampaign = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Error creating campaign:', error);
     res.status(500).json({ error: 'Failed to create campaign' });
+  }
+};
+
+// getCampaign - Get single campaign with details
+export const getCampaign = async (req: Request, res: Response) => {
+  try {
+    const campaignId = getParam(req.params.id);
+    const campaign = await prisma.campaign.findUnique({
+      where: { id: campaignId },
+      include: {
+        sponsor: true,
+        creatives: true,
+        placements: {
+          include: {
+            adSlot: true,
+            publisher: { select: { id: true, name: true, category: true } },
+          },
+        },
+      },
+    });
+
+    if (!campaign) {
+      res.status(404).json({ error: 'Campaign not found' });
+      return;
+    }
+
+    res.status(200).json(campaign);
+  } catch (error) {
+    console.error('Error fetching campaign:', error);
+    res.status(500).json({ error: 'Failed to fetch campaign' });
   }
 };
 
