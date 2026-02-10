@@ -1,0 +1,67 @@
+export enum UserType {
+  SPONSOR = 'SPONSOR',
+  PUBLISHER = 'PUBLISHER',
+}
+
+export enum SubscriptionTier {
+  FREE = 'FREE',
+  STARTER = 'STARTER',
+  PROFESSIONAL = 'PROFESSIONAL',
+  ENTERPRISE = 'ENTERPRISE',
+}
+
+export enum CampaignStatus {
+  DRAFT = 'DRAFT',
+  PENDING_REVIEW = 'PENDING_REVIEW',
+  APPROVED = 'APPROVED',
+  ACTIVE = 'ACTIVE',
+  PAUSED = 'PAUSED',
+  COMPLETED = 'COMPLETED',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum CreativeType {
+  BANNER = 'BANNER',
+  VIDEO = 'VIDEO',
+  NATIVE = 'NATIVE',
+  SPONSORED_POST = 'SPONSORED_POST',
+  PODCAST_READ = 'PODCAST_READ',
+}
+
+export enum AdSlotType {
+  DISPLAY = 'DISPLAY',
+  VIDEO = 'VIDEO',
+  NATIVE = 'NATIVE',
+  NEWSLETTER = 'NEWSLETTER',
+  PODCAST = 'PODCAST',
+}
+
+export enum PricingModel {
+  CPM = 'CPM',
+  CPC = 'CPC',
+  CPA = 'CPA',
+  FLAT_RATE = 'FLAT_RATE',
+}
+
+export enum PlacementStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  ACTIVE = 'ACTIVE',
+  PAUSED = 'PAUSED',
+  COMPLETED = 'COMPLETED',
+  REJECTED = 'REJECTED',
+}
+
+export enum PaymentType {
+  SUBSCRIPTION = 'SUBSCRIPTION',
+  CAMPAIGN_FUNDING = 'CAMPAIGN_FUNDING',
+  REFUND = 'REFUND',
+}
+
+export enum PaymentStatus {
+  PENDING = 'PENDING',
+  PROCESSING = 'PROCESSING',
+  COMPLETED = 'COMPLETED',
+  FAILED = 'FAILED',
+  REFUNDED = 'REFUNDED',
+}

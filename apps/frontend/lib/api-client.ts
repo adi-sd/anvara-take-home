@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { ApiError, AdSlot, Campaign, Placement, UserInfo } from './types';
+import { ApiError, AdSlot, Campaign, Placement, UserInfo } from '@/lib/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 

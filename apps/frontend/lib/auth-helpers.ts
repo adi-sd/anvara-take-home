@@ -1,11 +1,11 @@
 // frontend/lib/auth-helpers.ts
 import { headers } from 'next/headers';
-import { UserRole } from './types';
+import { UserType } from '@/lib/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 
 export interface RoleData {
-  role: UserRole | null;
+  role: UserType | null;
   sponsorId?: string;
   publisherId?: string;
   name?: string;
@@ -35,7 +35,7 @@ export async function getUserRole(userId: string): Promise<RoleData> {
 
     return {
       ...data,
-      role: data.role as UserRole, // Ensure role is typed correctly
+      role: data.role as UserType, // Ensure role is typed correctly
     };
   } catch (error) {
     return { role: null };
