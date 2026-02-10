@@ -1,8 +1,14 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { authenticatedRequest } from './helpers';
-import { AdSlot } from '../types';
+import { authenticatedRequest } from '@/lib/actions/helpers';
+import { AdSlot } from '@/lib/types';
+import {
+  CreateAdSlotInput,
+  UpdateAdSlotInput,
+  updateAdSlotSchema,
+  createAdSlotSchema,
+} from '@/lib/schemas/ad-slot';
 
 // GET Ad Slots
 export async function getAdSlotsAction(publisherId?: string) {
@@ -20,20 +26,36 @@ export async function getAdSlotAction(id: string) {
 }
 
 // CREATE Ad Slot
-export async function createAdSlotAction(data: {
-  name: string;
-  description?: string;
-  publisherId: string;
-}) {
-  const adSlot = await authenticatedRequest<AdSlot>('POST', '/api/ad-slots', data);
+export async function createAdSlotAction(data: CreateAdSlotInput) {
+  const validation = createAdSlotSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: 'Invalid input',
+      fieldErrors: validation.error.flatten().fieldErrors,
+    };
+  }
+
+  const adSlot = await authenticatedRequest<AdSlot>('POST', '/api/ad-slots', validation.data);
 
   revalidatePath('/ad-slots');
   return adSlot;
 }
 
 // UPDATE Ad Slot
-export async function updateAdSlotAction(id: string, data: Partial<AdSlot>) {
-  const adSlot = await authenticatedRequest<AdSlot>('PUT', `/api/ad-slots/${id}`, data);
+export async function updateAdSlotAction(id: string, data: UpdateAdSlotInput) {
+  const validation = updateAdSlotSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: 'Invalid input',
+      fieldErrors: validation.error.flatten().fieldErrors,
+    };
+  }
+
+  const adSlot = await authenticatedRequest<AdSlot>('PUT', `/api/ad-slots/${id}`, validation.data);
 
   revalidatePath('/ad-slots');
   revalidatePath(`/ad-slots/${id}`);

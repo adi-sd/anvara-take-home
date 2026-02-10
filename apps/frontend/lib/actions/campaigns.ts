@@ -1,8 +1,14 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { Campaign } from '../types';
-import { authenticatedRequest } from './helpers';
+import { Campaign } from '@/lib/types';
+import { authenticatedRequest } from '@/lib/actions/helpers';
+import {
+  CreateCampaignInput,
+  createCampaignSchema,
+  UpdateCampaignInput,
+  updateCampaignSchema,
+} from '@/lib/schemas/campaigns';
 
 // GET campaigns
 export async function getCampaignsAction(sponsorId?: string) {
@@ -20,27 +26,40 @@ export async function getCampaignAction(id: string) {
 }
 
 // CREATE campaign
-export async function createCampaignAction(data: {
-  name: string;
-  description?: string;
-  budget: number;
-  cpmRate?: number;
-  cpcRate?: number;
-  startDate: Date | string;
-  endDate: Date | string;
-  targetCategories?: string[];
-  targetRegions?: string[];
-  sponsorId: string;
-}) {
-  const campaign = await authenticatedRequest<Campaign>('POST', '/api/campaigns', data);
+export async function createCampaignAction(data: CreateCampaignInput) {
+  const validation = createCampaignSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: 'Invalid input',
+      fieldErrors: validation.error.flatten().fieldErrors,
+    };
+  }
+
+  const campaign = await authenticatedRequest<Campaign>('POST', '/api/campaigns', validation.data);
 
   revalidatePath('/campaigns');
   return campaign;
 }
 
 // UPDATE campaign
-export async function updateCampaignAction(id: string, data: Partial<Campaign>) {
-  const campaign = await authenticatedRequest<Campaign>('PUT', `/api/campaigns/${id}`, data);
+export async function updateCampaignAction(id: string, data: UpdateCampaignInput) {
+  const validation = updateCampaignSchema.partial().safeParse(data);
+
+  if (!validation.success) {
+    return {
+      success: false,
+      error: 'Invalid input',
+      fieldErrors: validation.error.flatten().fieldErrors,
+    };
+  }
+
+  const campaign = await authenticatedRequest<Campaign>(
+    'PUT',
+    `/api/campaigns/${id}`,
+    validation.data
+  );
 
   revalidatePath('/campaigns');
   revalidatePath(`/campaigns/${id}`);
