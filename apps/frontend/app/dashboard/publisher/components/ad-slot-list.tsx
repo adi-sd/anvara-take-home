@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getAdSlots } from '@/lib/api';
+import { getAdSlots } from '@/lib/api-client';
 import { authClient } from '@/auth-client';
 import { AdSlotCard } from './ad-slot-card';
 

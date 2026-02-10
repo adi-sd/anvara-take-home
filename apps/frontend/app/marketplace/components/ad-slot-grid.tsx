@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAdSlots } from '@/lib/api';
+import { getAdSlots } from '@/lib/api-client';
 
 const typeColors: Record<string, string> = {
   DISPLAY: 'bg-blue-100 text-blue-700',

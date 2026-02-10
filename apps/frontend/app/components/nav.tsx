@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { authClient } from '@/auth-client';
-import { getCurrentUserRole } from '@/lib/api';
+import { getCurrentUserRole } from '@/lib/api-client';
 
 type UserRole = 'sponsor' | 'publisher' | null;
 
