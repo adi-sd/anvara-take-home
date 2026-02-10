@@ -1,7 +1,7 @@
 import { Campaign } from '@/lib/types';
 import { CampaignGrid } from './campaign-grid';
 import { CampaignError } from './campaign-error';
-import { getCampaignsServer } from '@/lib/api-server';
+import { getCampaignsAction } from '@/lib/actions/campaigns';
 
 interface CampaignListProps {
   sponsorId: string;
@@ -14,7 +14,7 @@ export async function CampaignList({ sponsorId }: CampaignListProps) {
   let error: Error | null = null;
 
   try {
-    campaigns = await getCampaignsServer(sponsorId);
+    campaigns = await getCampaignsAction(sponsorId);
   } catch (err) {
     error = err instanceof Error ? err : new Error('Failed to load campaigns');
   }
