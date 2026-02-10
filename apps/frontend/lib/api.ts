@@ -1,57 +1,71 @@
-// Simple API client
-// FIXME: This client has no error response parsing - when API returns { error: "..." },
-// we should extract and throw that message instead of generic "API request failed"
-
-import { RequestInit } from 'next/dist/server/web/spec-extension/request';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { ApiError, AdSlot, Campaign, Placement, UserInfo } from './types';
 
-// TODO: Add authentication token to requests
-// Hint: Include credentials: 'include' for cookie-based auth, or
-// add Authorization header for token-based auth
-
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
 
-export async function api<T>(endpoint: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_URL}${endpoint}`, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    ...options,
+// Create Client Side Axios instance
+const createAxiosInstance = async () => {
+  return axios.create({
+    baseURL: API_URL,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    withCredentials: true, // Ensure cookies are sent with requests
   });
-  if (!res.ok) {
-    const error: ApiError = await res.json().catch(() => ({ message: 'API request failed' }));
-    throw error; // Now throws structured ApiError
+};
+
+export async function fetchFromApi<T>(endpoint: string, config?: AxiosRequestConfig): Promise<T> {
+  const axiosInstance = await createAxiosInstance();
+  const response: AxiosResponse<T | ApiError> = await axiosInstance.request({
+    url: endpoint,
+    ...config,
+  });
+  if (response.status >= 400) {
+    const errorData = response.data as ApiError;
+    const errorMessage =
+      errorData.message || errorData.error || `Request failed with status ${response.status}`;
+    throw new Error(errorMessage);
   }
-  return res.json();
+  return response.data as T;
 }
 
 // Auth
 export async function getCurrentUserRole(userId: string): Promise<UserInfo> {
-  return api<UserInfo>(`/api/auth/role/${userId}`);
+  return fetchFromApi<UserInfo>(`/api/auth/role/${userId}`);
 }
 
 // Campaigns
 export const getCampaigns = (sponsorId?: string) => {
-  console.log('Fetching campaigns with sponsorId:', sponsorId);
-  return api<Campaign[]>(sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns');
+  return fetchFromApi<Campaign[]>(
+    sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns'
+  );
 };
-export const getCampaign = (id: string) => api<Campaign>(`/api/campaigns/${id}`);
+export const getCampaign = (id: string) => fetchFromApi<Campaign>(`/api/campaigns/${id}`);
 export const createCampaign = (data: Campaign) =>
-  api('/api/campaigns', { method: 'POST', body: JSON.stringify(data) });
-// TODO: Add updateCampaign and deleteCampaign functions
+  fetchFromApi('/api/campaigns', { method: 'POST', data });
+export const updateCampaign = (id: string, data: Partial<Campaign>) =>
+  fetchFromApi(`/api/campaigns/${id}`, { method: 'PUT', data });
+export const deleteCampaign = (id: string) =>
+  fetchFromApi(`/api/campaigns/${id}`, { method: 'DELETE' });
 
 // Ad Slots
 export const getAdSlots = (publisherId?: string) =>
-  api<AdSlot[]>(publisherId ? `/api/ad-slots?publisherId=${publisherId}` : '/api/ad-slots');
-export const getAdSlot = (id: string) => api<AdSlot>(`/api/ad-slots/${id}`);
+  fetchFromApi<AdSlot[]>(
+    publisherId ? `/api/ad-slots?publisherId=${publisherId}` : '/api/ad-slots'
+  );
+export const getAdSlot = (id: string) => fetchFromApi<AdSlot>(`/api/ad-slots/${id}`);
 export const createAdSlot = (data: AdSlot) =>
-  api('/api/ad-slots', { method: 'POST', body: JSON.stringify(data) });
-// TODO: Add updateAdSlot, deleteAdSlot functions
+  fetchFromApi('/api/ad-slots', { method: 'POST', data });
+export const updateAdSlot = (id: string, data: Partial<AdSlot>) =>
+  fetchFromApi(`/api/ad-slots/${id}`, { method: 'PUT', data });
+export const deleteAdSlot = (id: string) =>
+  fetchFromApi(`/api/ad-slots/${id}`, { method: 'DELETE' });
 
 // Placements
-export const getPlacements = () => api<Placement[]>('/api/placements');
+export const getPlacements = () => fetchFromApi<Placement[]>('/api/placements');
 export const createPlacement = (data: Placement) =>
-  api('/api/placements', { method: 'POST', body: JSON.stringify(data) });
+  fetchFromApi('/api/placements', { method: 'POST', data });
 
 // Dashboard
-export const getStats = () => api<Placement>('/api/dashboard/stats');
+export const getStats = () => fetchFromApi<Placement>('/api/dashboard/stats');

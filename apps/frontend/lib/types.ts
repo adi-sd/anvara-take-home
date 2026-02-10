@@ -1,8 +1,8 @@
 // Core types matching the Prisma schema
 
 export enum UserRole {
-  SPONSOR = "sponsor",
-  PUBLISHER = "publisher",
+  SPONSOR = 'sponsor',
+  PUBLISHER = 'publisher',
 }
 
 export interface UserInfo {
@@ -48,5 +48,6 @@ export interface Placement {
 
 export interface ApiError {
   message: string;
-  code?: string;
+  error?: string;
+  statusCode?: number;
 }
