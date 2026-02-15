@@ -64,7 +64,7 @@ export async function updateAdSlotAction(id: string, data: UpdateAdSlotInput) {
 
 // DELETE Ad Slot
 export async function deleteAdSlotAction(id: string) {
-  await authenticatedRequest('DELETE', `/api/ad-slots/${id}`);
+  await authenticatedRequest('DELETE', `/ad-slots/${id}`);
 
   revalidatePath('/ad-slots');
   return { success: true };
@@ -72,7 +72,7 @@ export async function deleteAdSlotAction(id: string) {
 
 // POST book ad slot
 export async function bookAdSlotAction(adSlotId: string, campaignId: string) {
-  await authenticatedRequest('POST', `/api/ad-slots/${adSlotId}/book`, { campaignId });
+  await authenticatedRequest('POST', `/ad-slots/${adSlotId}/book`, { campaignId });
 
   revalidatePath('/ad-slots');
   return { success: true };
@@ -80,7 +80,7 @@ export async function bookAdSlotAction(adSlotId: string, campaignId: string) {
 
 // POST unbook ad slot
 export async function unbookAdSlotAction(adSlotId: string) {
-  await authenticatedRequest('POST', `/api/ad-slots/${adSlotId}/unbook`);
+  await authenticatedRequest('POST', `/ad-slots/${adSlotId}/unbook`);
 
   revalidatePath('/ad-slots');
   return { success: true };

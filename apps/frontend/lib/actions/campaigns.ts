@@ -14,14 +14,14 @@ import {
 export async function getCampaignsAction(sponsorId?: string) {
   const campaigns = await authenticatedRequest<Campaign[]>(
     'GET',
-    sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns'
+    sponsorId ? `/campaigns?sponsorId=${sponsorId}` : '/campaigns'
   );
   return campaigns;
 }
 
 // GET single campaign
 export async function getCampaignAction(id: string) {
-  const campaign = await authenticatedRequest<Campaign>('GET', `/api/campaigns/${id}`);
+  const campaign = await authenticatedRequest<Campaign>('GET', `/campaigns/${id}`);
   return campaign;
 }
 
@@ -37,7 +37,7 @@ export async function createCampaignAction(data: CreateCampaignInput) {
     };
   }
 
-  const campaign = await authenticatedRequest<Campaign>('POST', '/api/campaigns', validation.data);
+  const campaign = await authenticatedRequest<Campaign>('POST', '/campaigns', validation.data);
 
   revalidatePath('/campaigns');
   return campaign;
@@ -57,7 +57,7 @@ export async function updateCampaignAction(id: string, data: UpdateCampaignInput
 
   const campaign = await authenticatedRequest<Campaign>(
     'PUT',
-    `/api/campaigns/${id}`,
+    `/campaigns/${id}`,
     validation.data
   );
 
@@ -68,7 +68,7 @@ export async function updateCampaignAction(id: string, data: UpdateCampaignInput
 
 // DELETE campaign
 export async function deleteCampaignAction(id: string) {
-  await authenticatedRequest('DELETE', `/api/campaigns/${id}`);
+  await authenticatedRequest('DELETE', `/campaigns/${id}`);
 
   revalidatePath('/campaigns');
   return { success: true };

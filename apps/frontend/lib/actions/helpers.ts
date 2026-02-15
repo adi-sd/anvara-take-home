@@ -2,7 +2,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { cookies } from 'next/headers';
 import { ApiError } from '@/lib/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
+// Example API URL, can be set via environment variable
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291/api';
 
 // Create authenticated axios instance for server-side use
 export async function createAuthenticatedAxios() {
