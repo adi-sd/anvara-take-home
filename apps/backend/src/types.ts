@@ -6,6 +6,7 @@ export interface AuthRequest extends Request {
   user?: {
     id: string;
     email: string;
+    name?: string;
     role: UserType;
     sponsorId?: string; // For SPONSOR role
     publisherId?: string; // For PUBLISHER role

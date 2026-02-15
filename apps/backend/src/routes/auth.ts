@@ -25,6 +25,7 @@ export async function getCurrentUser(req: AuthRequest, res: Response) {
     user: {
       id: req.user.id,
       email: req.user.email,
+      name: req.user.name || null,
       role: req.user.role,
       sponsorId: req.user.sponsorId || null,
       publisherId: req.user.publisherId || null,
