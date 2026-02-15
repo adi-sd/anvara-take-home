@@ -4,7 +4,7 @@ import { authenticatedRequest } from '@/lib/actions/helpers';
 import { UserInfo } from '@/lib/types';
 
 // GET Current user Info
-export async function getCurrentUserInfo() {
+export async function getUserInfo() {
   const userInfo = await authenticatedRequest<UserInfo>('GET', '/auth/me');
   return userInfo;
 }
