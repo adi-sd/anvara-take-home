@@ -45,7 +45,7 @@ export async function createCampaignAction(data: CreateCampaignInput) {
 
 // UPDATE campaign
 export async function updateCampaignAction(id: string, data: UpdateCampaignInput) {
-  const validation = updateCampaignSchema.partial().safeParse(data);
+  const validation = updateCampaignSchema.safeParse(data);
 
   if (!validation.success) {
     return {
