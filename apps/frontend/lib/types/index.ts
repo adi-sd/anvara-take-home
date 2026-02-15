@@ -8,9 +8,6 @@ export * from './analytics';
 // Core Types
 export * from './core';
 
-// Creation Types
-export * from './creation';
-
 // Enum Types
 export * from './enums';
 
@@ -19,9 +16,6 @@ export * from './extended';
 
 // Filter Types
 export * from './filters';
-
-// Mutation Types
-export * from './mutation';
 
 // Utility Types
 export * from './utility';
