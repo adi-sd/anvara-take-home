@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { ApiError, AdSlot, Campaign, Placement, UserInfo } from '@/lib/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291/api';
 
 // Create Client Side Axios instance
 const createAxiosInstance = async () => {
@@ -32,40 +32,34 @@ export async function fetchFromApi<T>(endpoint: string, config?: AxiosRequestCon
 
 // Auth
 export async function getCurrentUserRole(userId: string): Promise<UserInfo> {
-  return fetchFromApi<UserInfo>(`/api/auth/role/${userId}`);
+  return fetchFromApi<UserInfo>(`/auth/role/${userId}`);
 }
 
 // Campaigns
 export const getCampaigns = (sponsorId?: string) => {
-  return fetchFromApi<Campaign[]>(
-    sponsorId ? `/api/campaigns?sponsorId=${sponsorId}` : '/api/campaigns'
-  );
+  return fetchFromApi<Campaign[]>(sponsorId ? `/campaigns?sponsorId=${sponsorId}` : '/campaigns');
 };
-export const getCampaign = (id: string) => fetchFromApi<Campaign>(`/api/campaigns/${id}`);
+export const getCampaign = (id: string) => fetchFromApi<Campaign>(`/campaigns/${id}`);
 export const createCampaign = (data: Campaign) =>
-  fetchFromApi('/api/campaigns', { method: 'POST', data });
+  fetchFromApi('/campaigns', { method: 'POST', data });
 export const updateCampaign = (id: string, data: Partial<Campaign>) =>
-  fetchFromApi(`/api/campaigns/${id}`, { method: 'PUT', data });
+  fetchFromApi(`/campaigns/${id}`, { method: 'PUT', data });
 export const deleteCampaign = (id: string) =>
-  fetchFromApi(`/api/campaigns/${id}`, { method: 'DELETE' });
+  fetchFromApi(`/campaigns/${id}`, { method: 'DELETE' });
 
 // Ad Slots
 export const getAdSlots = (publisherId?: string) =>
-  fetchFromApi<AdSlot[]>(
-    publisherId ? `/api/ad-slots?publisherId=${publisherId}` : '/api/ad-slots'
-  );
-export const getAdSlot = (id: string) => fetchFromApi<AdSlot>(`/api/ad-slots/${id}`);
-export const createAdSlot = (data: AdSlot) =>
-  fetchFromApi('/api/ad-slots', { method: 'POST', data });
+  fetchFromApi<AdSlot[]>(publisherId ? `/ad-slots?publisherId=${publisherId}` : '/ad-slots');
+export const getAdSlot = (id: string) => fetchFromApi<AdSlot>(`/ad-slots/${id}`);
+export const createAdSlot = (data: AdSlot) => fetchFromApi('/ad-slots', { method: 'POST', data });
 export const updateAdSlot = (id: string, data: Partial<AdSlot>) =>
-  fetchFromApi(`/api/ad-slots/${id}`, { method: 'PUT', data });
-export const deleteAdSlot = (id: string) =>
-  fetchFromApi(`/api/ad-slots/${id}`, { method: 'DELETE' });
+  fetchFromApi(`/ad-slots/${id}`, { method: 'PUT', data });
+export const deleteAdSlot = (id: string) => fetchFromApi(`/ad-slots/${id}`, { method: 'DELETE' });
 
 // Placements
-export const getPlacements = () => fetchFromApi<Placement[]>('/api/placements');
+export const getPlacements = () => fetchFromApi<Placement[]>('/placements');
 export const createPlacement = (data: Placement) =>
-  fetchFromApi('/api/placements', { method: 'POST', data });
+  fetchFromApi('/placements', { method: 'POST', data });
 
 // Dashboard
-export const getStats = () => fetchFromApi<Placement>('/api/dashboard/stats');
+export const getStats = () => fetchFromApi<Placement>('/dashboard/stats');

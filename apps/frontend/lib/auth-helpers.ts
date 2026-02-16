@@ -20,7 +20,7 @@ export async function getUserRole(userId: string): Promise<RoleData> {
     const headersList = await headers();
     const cookie = headersList.get('cookie') || '';
 
-    const res = await fetch(`${API_URL}/api/auth/role/${userId}`, {
+    const res = await fetch(`${API_URL}/auth/role/${userId}`, {
       cache: 'no-store',
       headers: {
         Cookie: cookie, // Forward the cookie from the incoming request
