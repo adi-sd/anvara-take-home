@@ -1,6 +1,8 @@
 import express, { type Application } from 'express';
 import cors from 'cors';
 import routes from './routes/index.js';
+import { httpLogger } from './middleware/logging.js';
+import { logger } from './lib/logger.js';
 
 const app: Application = express();
 const PORT = process.env.BACKEND_PORT || 4291;
@@ -16,6 +18,9 @@ app.use(
   })
 );
 app.use(express.json());
+
+// Logging middleware (using custom logger)
+app.use(httpLogger);
 
 // Mount all API routes
 app.use('/api', routes);
@@ -52,6 +57,7 @@ app.listen(PORT, () => {
   console.log('  Health:');
   console.log('    GET    /api/health');
   console.log('');
+  logger.info(`Backend server started on port ${PORT}`);
 });
 
 export default app;
