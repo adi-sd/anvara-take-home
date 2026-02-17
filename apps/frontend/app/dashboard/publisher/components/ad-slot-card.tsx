@@ -1,32 +1,22 @@
 'use client';
 
+import { ItemCardContainer } from '@/app/components/dashboard/item-card-container';
+import { typeColors } from '@/lib/constants/ui-constants';
 import { AdSlot } from '@/lib/types';
 
 interface AdSlotCardProps {
   item: AdSlot;
 }
 
-const typeColors: Record<string, string> = {
-  DISPLAY: 'bg-blue-100 text-blue-700',
-  VIDEO: 'bg-red-100 text-red-700',
-  NEWSLETTER: 'bg-purple-100 text-purple-700',
-  PODCAST: 'bg-orange-100 text-orange-700',
-};
-
 export function AdSlotCard({ item: adSlot }: AdSlotCardProps) {
+  const adTypeBadge = (
+    <span className={`rounded px-2 py-0.5 text-xs ${typeColors[adSlot.type] || 'bg-gray-100'}`}>
+      {adSlot.type}
+    </span>
+  );
+
   return (
-    <div className="rounded-lg border border-[--color-border] p-4">
-      <div className="mb-2 flex items-start justify-between">
-        <h3 className="font-semibold">{adSlot.name}</h3>
-        <span className={`rounded px-2 py-0.5 text-xs ${typeColors[adSlot.type] || 'bg-gray-100'}`}>
-          {adSlot.type}
-        </span>
-      </div>
-
-      {adSlot.description && (
-        <p className="mb-3 text-sm text-[--color-muted] line-clamp-2">{adSlot.description}</p>
-      )}
-
+    <ItemCardContainer name={adSlot.name} description={adSlot.description} badge={adTypeBadge}>
       <div className="flex items-center justify-between">
         <span
           className={`text-sm ${adSlot.isAvailable ? 'text-green-600' : 'text-[--color-muted]'}`}
@@ -37,8 +27,6 @@ export function AdSlotCard({ item: adSlot }: AdSlotCardProps) {
           ${Number(adSlot.basePrice).toLocaleString()}/mo
         </span>
       </div>
-
-      {/* TODO: Add edit/toggle availability buttons */}
-    </div>
+    </ItemCardContainer>
   );
 }
