@@ -14,14 +14,14 @@ import {
 export async function getAdSlotsAction(publisherId?: string) {
   const adSlots = await authenticatedRequest<AdSlot[]>(
     'GET',
-    publisherId ? `/api/ad-slots?publisherId=${publisherId}` : '/api/ad-slots'
+    publisherId ? `/ad-slots?publisherId=${publisherId}` : '/ad-slots'
   );
   return adSlots;
 }
 
 // GET single Ad Slot
 export async function getAdSlotAction(id: string) {
-  const adSlot = await authenticatedRequest<AdSlot>('GET', `/api/ad-slots/${id}`);
+  const adSlot = await authenticatedRequest<AdSlot>('GET', `/ad-slots/${id}`);
   return adSlot;
 }
 
@@ -37,7 +37,7 @@ export async function createAdSlotAction(data: CreateAdSlotInput) {
     };
   }
 
-  const adSlot = await authenticatedRequest<AdSlot>('POST', '/api/ad-slots', validation.data);
+  const adSlot = await authenticatedRequest<AdSlot>('POST', '/ad-slots', validation.data);
 
   revalidatePath('/ad-slots');
   return adSlot;
@@ -55,7 +55,7 @@ export async function updateAdSlotAction(id: string, data: UpdateAdSlotInput) {
     };
   }
 
-  const adSlot = await authenticatedRequest<AdSlot>('PUT', `/api/ad-slots/${id}`, validation.data);
+  const adSlot = await authenticatedRequest<AdSlot>('PUT', `/ad-slots/${id}`, validation.data);
 
   revalidatePath('/ad-slots');
   revalidatePath(`/ad-slots/${id}`);
