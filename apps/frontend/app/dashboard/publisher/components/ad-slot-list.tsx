@@ -1,66 +1,33 @@
-'use client';
+import { AdSlot } from '@/lib/types';
+import { AdSlotGrid } from './ad-slot-grid';
+import { AdSlotError } from './ad-slot-error';
+import { getAdSlotsAction } from '@/lib/actions/ad-slots';
 
-import { useEffect, useState } from 'react';
-import { getAdSlots } from '@/lib/api-client';
-import { authClient } from '@/auth-client';
-import { AdSlotCard } from './ad-slot-card';
+interface AdSlotListProps {
+  publisherId: string;
+}
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4291';
+export async function AdSlotList({ publisherId }: AdSlotListProps) {
+  let adSlots: AdSlot[] = [];
+  let error: Error | null = null;
 
-export function AdSlotList() {
-  const [adSlots, setAdSlots] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { data: session } = authClient.useSession();
-
-  useEffect(() => {
-    async function loadAdSlots() {
-      if (!session?.user?.id) return;
-
-      try {
-        // Get the user's publisherId from the backend
-        const roleRes = await fetch(`${API_URL}/auth/role/${session.user.id}`, {
-          credentials: 'include', // Include cookies for authentication
-        });
-        const roleData = await roleRes.json();
-
-        if (roleData.publisherId) {
-          const data = await getAdSlots(roleData.publisherId);
-          setAdSlots(data);
-        } else {
-          setAdSlots([]);
-        }
-      } catch {
-        setError('Failed to load ad slots');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadAdSlots();
-  }, [session?.user?.id]);
-
-  if (loading) {
-    return <div className="py-8 text-center text-[--color-muted]">Loading ad slots...</div>;
+  try {
+    adSlots = await getAdSlotsAction(publisherId);
+  } catch (err) {
+    error = err instanceof Error ? err : new Error('Failed to load ad slots');
   }
 
   if (error) {
-    return <div className="rounded border border-red-200 bg-red-50 p-4 text-red-600">{error}</div>;
+    return <AdSlotError error={error}></AdSlotError>;
   }
 
   if (adSlots.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-[--color-border] p-8 text-center text-[--color-muted]">
-        No ad slots yet. Create your first ad slot to start earning.
-      </div>
+      <AdSlotError
+        error={new Error('No ad slots yet. Create your first ad slot to start earning.')}
+      ></AdSlotError>
     );
   }
 
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {adSlots.map((slot) => (
-        <AdSlotCard key={slot.id} adSlot={slot} />
-      ))}
-    </div>
-  );
+  return <AdSlotGrid adSlots={adSlots} />;
 }
