@@ -1,67 +1,67 @@
 export enum UserType {
-  SPONSOR = 'SPONSOR',
-  PUBLISHER = 'PUBLISHER',
+  SPONSOR = 'sponsor',
+  PUBLISHER = 'publisher',
 }
 
 export enum SubscriptionTier {
-  FREE = 'FREE',
-  STARTER = 'STARTER',
-  PROFESSIONAL = 'PROFESSIONAL',
-  ENTERPRISE = 'ENTERPRISE',
+  FREE = 'free',
+  STARTER = 'starter',
+  PROFESSIONAL = 'professional',
+  ENTERPRISE = 'enterprise',
 }
 
 export enum CampaignStatus {
-  DRAFT = 'DRAFT',
-  PENDING_REVIEW = 'PENDING_REVIEW',
-  APPROVED = 'APPROVED',
-  ACTIVE = 'ACTIVE',
-  PAUSED = 'PAUSED',
-  COMPLETED = 'COMPLETED',
-  CANCELLED = 'CANCELLED',
+  DRAFT = 'draft',
+  PENDING_REVIEW = 'pending_review',
+  APPROVED = 'approved',
+  ACTIVE = 'active',
+  PAUSED = 'paused',
+  COMPLETED = 'completed',
+  CANCELLED = 'cancelled',
 }
 
 export enum CreativeType {
-  BANNER = 'BANNER',
-  VIDEO = 'VIDEO',
-  NATIVE = 'NATIVE',
-  SPONSORED_POST = 'SPONSORED_POST',
-  PODCAST_READ = 'PODCAST_READ',
+  BANNER = 'banner',
+  VIDEO = 'video',
+  NATIVE = 'native',
+  SPONSORED_POST = 'sponsored_post',
+  PODCAST_READ = 'podcast_read',
 }
 
 export enum AdSlotType {
-  DISPLAY = 'DISPLAY',
-  VIDEO = 'VIDEO',
-  NATIVE = 'NATIVE',
-  NEWSLETTER = 'NEWSLETTER',
-  PODCAST = 'PODCAST',
+  DISPLAY = 'display',
+  VIDEO = 'video',
+  NATIVE = 'native',
+  NEWSLETTER = 'newsletter',
+  PODCAST = 'podcast',
 }
 
 export enum PricingModel {
-  CPM = 'CPM',
-  CPC = 'CPC',
-  CPA = 'CPA',
-  FLAT_RATE = 'FLAT_RATE',
+  CPM = 'cpm',
+  CPC = 'cpc',
+  CPA = 'cpa',
+  FLAT_RATE = 'flat_rate',
 }
 
 export enum PlacementStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  ACTIVE = 'ACTIVE',
-  PAUSED = 'PAUSED',
-  COMPLETED = 'COMPLETED',
-  REJECTED = 'REJECTED',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  ACTIVE = 'active',
+  PAUSED = 'paused',
+  COMPLETED = 'completed',
+  REJECTED = 'rejected',
 }
 
 export enum PaymentType {
-  SUBSCRIPTION = 'SUBSCRIPTION',
-  CAMPAIGN_FUNDING = 'CAMPAIGN_FUNDING',
-  REFUND = 'REFUND',
+  SUBSCRIPTION = 'subscription',
+  CAMPAIGN_FUNDING = 'campaign_funding',
+  REFUND = 'refund',
 }
 
 export enum PaymentStatus {
-  PENDING = 'PENDING',
-  PROCESSING = 'PROCESSING',
-  COMPLETED = 'COMPLETED',
-  FAILED = 'FAILED',
-  REFUNDED = 'REFUNDED',
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+  REFUNDED = 'refunded',
 }
