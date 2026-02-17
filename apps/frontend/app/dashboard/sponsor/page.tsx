@@ -4,8 +4,10 @@ import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { UserType } from '@/lib/types';
 import { getUserRole } from '@/lib/auth-helpers';
-import { CampaignList } from './components/campaign-list';
-import { CampaignLoading } from './components/campaign-loading';
+import { ItemLoading } from '@/app/components/dashboard/item-loading';
+import { ItemList } from '@/app/components/dashboard/item-list';
+import { getCampaignsAction } from '@/lib/actions/campaigns';
+import { CampaignCard } from './components/campaign-card';
 
 export default async function SponsorDashboard() {
   const session = await auth.api.getSession({
@@ -28,9 +30,15 @@ export default async function SponsorDashboard() {
         <h1 className="text-2xl font-bold">My Campaigns</h1>
         {/* TODO: Add CreateCampaignButton here */}
       </div>
-      <Suspense fallback={<CampaignLoading />}>
+      <Suspense fallback={<ItemLoading message={'Loading campaigns...'} />}>
         {/* User already verified as sponsor, so roleData.sponsorId must be defined */}
-        <CampaignList sponsorId={roleData.sponsorId!} />
+        <ItemList
+          id={roleData.sponsorId!}
+          fetchItems={getCampaignsAction}
+          ItemCard={CampaignCard}
+          emptyMessage="No campaigns found"
+          errorMessage="Failed to load campaigns"
+        />
       </Suspense>
     </div>
   );

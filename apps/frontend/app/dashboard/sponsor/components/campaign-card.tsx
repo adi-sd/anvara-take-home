@@ -3,7 +3,7 @@
 import { Campaign } from '@/lib/types';
 
 interface CampaignCardProps {
-  campaign: Campaign;
+  item: Campaign;
 }
 
 const statusColors: Record<string, string> = {
@@ -13,7 +13,7 @@ const statusColors: Record<string, string> = {
   COMPLETED: 'bg-blue-100 text-blue-700',
 };
 
-export function CampaignCard({ campaign }: CampaignCardProps) {
+export function CampaignCard({ item: campaign }: CampaignCardProps) {
   const progress =
     campaign.budget > 0 ? (Number(campaign.spent) / Number(campaign.budget)) * 100 : 0;
 

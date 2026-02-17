@@ -1,9 +1,9 @@
 'use client';
 
-import { AdSlot } from "@/lib/types";
+import { AdSlot } from '@/lib/types';
 
 interface AdSlotCardProps {
-  adSlot: AdSlot
+  item: AdSlot;
 }
 
 const typeColors: Record<string, string> = {
@@ -13,7 +13,7 @@ const typeColors: Record<string, string> = {
   PODCAST: 'bg-orange-100 text-orange-700',
 };
 
-export function AdSlotCard({ adSlot }: AdSlotCardProps) {
+export function AdSlotCard({ item: adSlot }: AdSlotCardProps) {
   return (
     <div className="rounded-lg border border-[--color-border] p-4">
       <div className="mb-2 flex items-start justify-between">
